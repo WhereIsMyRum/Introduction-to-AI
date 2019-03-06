@@ -1,6 +1,7 @@
 from tkinter import *
 from random import randint
-import GameAI as AI
+import GameAI 
+import time
 
 
 root = Tk()
@@ -125,7 +126,7 @@ def buttonClick(button, buttonID):
 
     whoseTurn = -1 * whoseTurn + 1
     disableButtons()
-    #checkSum()
+    checkSum()
     checkIfEnd()
     return 
 
@@ -173,12 +174,14 @@ for i in range(0,noOfSmallFields):
 ## start the game
 setupBoard()
 disableButtons()
+AI = GameAI.AI()
+
 
 while True:
     root.update_idletasks()
     root.update()
     if(whoseTurn == 0):
-        choice = AI.makeDecision()
+        choice = AI.makeDecision(smallFieldsArray, basesArray)
         print("AI clicking: ", choice) 
         buttonClick(smallFieldsArray[choice], choice)
 
