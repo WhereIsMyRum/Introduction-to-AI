@@ -1,5 +1,7 @@
 from tkinter import *
 from random import randint
+import GameAI as AI
+
 
 root = Tk()
 
@@ -171,4 +173,12 @@ for i in range(0,noOfSmallFields):
 ## start the game
 setupBoard()
 disableButtons()
-root.mainloop()
+
+while True:
+    root.update_idletasks()
+    root.update()
+    if(whoseTurn == 0):
+        choice = AI.makeDecision()
+        print("AI clicking: ", choice) 
+        buttonClick(smallFieldsArray[choice], choice)
+
