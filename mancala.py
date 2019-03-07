@@ -10,8 +10,8 @@ root = Tk()
 noOfPlayers = 2
 noOfSmallFields = 6 * noOfPlayers
 noOfBases = noOfPlayers
-whoseTurn = randint(0,1)
-print(whoseTurn)
+whoseTurnInitial = randint(0,1)
+whoseTurn = whoseTurnInitial
 turn = 0
 
 smallFieldsArray = []
@@ -37,7 +37,7 @@ def checkIfEnd():
         #print(basesArray[1]['text']) # print the base value before adding the remaining pebbles
         for i in range(6, 12):
             basesArray[1]['text'] = str(int(basesArray[1]['text']) + int(smallFieldsArray[i]['text']))
-        return true
+        return True
     else:
         counter = 0
         for i in range(6,12):
@@ -52,8 +52,7 @@ def checkIfEnd():
     if (counter == 6):
         for i in range(0,12):
             smallFieldsArray[i].config(state='disabled', text='0')
-        print("Score of player 0: ", basesArray[0]['text'])
-        print("Score of player 1: ", basesArray[1]['text'])
+        
         return True
 
 # function for checking if something hasnt been fucked up
@@ -134,38 +133,41 @@ def buttonClick(button, buttonID):
     checkSum()
     if(checkIfEnd()):
         print("End of game")
+        print("The game was started by: ", whoseTurnInitial)
+        print("Score of player 0: ", basesArray[0]['text'])
+        print("Score of player 1: ", basesArray[1]['text'])
         exit()
     return 
 
 def setupBoard():
     smallFieldsArray.append(Button(root, text="4", height = 5,  width = 10, fg="red", command=lambda: buttonClick(smallFieldsArray[0], 0)))
-    smallFieldsArray[0].grid(row=0, column=5+1)
+    smallFieldsArray[0].grid(row=2, column=0+1)
     smallFieldsArray.append(Button(root, text="4", height = 5,  width = 10, fg="red", command=lambda: buttonClick(smallFieldsArray[1], 1)))
-    smallFieldsArray[1].grid(row=0, column=4+1)
+    smallFieldsArray[1].grid(row=2, column=1+1)
     smallFieldsArray.append(Button(root, text="4", height = 5,  width = 10, fg="red", command=lambda: buttonClick(smallFieldsArray[2], 2)))
-    smallFieldsArray[2].grid(row=0, column=3+1)
+    smallFieldsArray[2].grid(row=2, column=2+1)
     smallFieldsArray.append(Button(root, text="4", height = 5,  width = 10, fg="red", command=lambda: buttonClick(smallFieldsArray[3], 3)))
-    smallFieldsArray[3].grid(row=0, column=2+1)
+    smallFieldsArray[3].grid(row=2, column=3+1)
     smallFieldsArray.append(Button(root, text="4", height = 5,  width = 10, fg="red", command=lambda: buttonClick(smallFieldsArray[4], 4)))
-    smallFieldsArray[4].grid(row=0, column=1+1)
+    smallFieldsArray[4].grid(row=2, column=4+1)
     smallFieldsArray.append(Button(root, text="4", height = 5,  width = 10, fg="red", command=lambda: buttonClick(smallFieldsArray[5], 5)))
-    smallFieldsArray[5].grid(row=0, column=0+1)
+    smallFieldsArray[5].grid(row=2, column=5+1)
     smallFieldsArray.append(Button(root, text="4", height = 5,  width = 10, fg="green", command=lambda: buttonClick(smallFieldsArray[6], 6)))
-    smallFieldsArray[6].grid(row=2, column=4-3)
+    smallFieldsArray[6].grid(row=0, column=9-3)
     smallFieldsArray.append(Button(root, text="4", height = 5,  width = 10, fg="green", command=lambda: buttonClick(smallFieldsArray[7], 7)))
-    smallFieldsArray[7].grid(row=2, column=5-3)
+    smallFieldsArray[7].grid(row=0, column=8-3)
     smallFieldsArray.append(Button(root, text="4", height = 5,  width = 10, fg="green", command=lambda: buttonClick(smallFieldsArray[8], 8)))
-    smallFieldsArray[8].grid(row=2, column=6-3)
+    smallFieldsArray[8].grid(row=0, column=7-3)
     smallFieldsArray.append(Button(root, text="4", height = 5,  width = 10, fg="green", command=lambda: buttonClick(smallFieldsArray[9], 9)))
-    smallFieldsArray[9].grid(row=2, column=7-3)
+    smallFieldsArray[9].grid(row=0, column=6-3)
     smallFieldsArray.append(Button(root, text="4", height = 5,  width = 10, fg="green", command=lambda: buttonClick(smallFieldsArray[10], 10)))
-    smallFieldsArray[10].grid(row=2, column=8-3)
+    smallFieldsArray[10].grid(row=0, column=5-3)
     smallFieldsArray.append(Button(root, text="4", height = 5,  width = 10, fg="green", command=lambda: buttonClick(smallFieldsArray[11], 11)))
-    smallFieldsArray[11].grid(row=2, column=9-3)
+    smallFieldsArray[11].grid(row=0, column=4-3)
     for i in range(0, noOfBases):
         basesArray.append(Button(root, text="0", height = 10, width = 10, fg="blue", state='disabled'))
-    basesArray[0].grid(row=0, column=0, rowspan=3)
-    basesArray[1].grid(row=0, column=7, rowspan=3)
+    basesArray[0].grid(row=0, column=7, rowspan=3)
+    basesArray[1].grid(row=0, column=0, rowspan=3)
 '''
 for i in range(0,noOfSmallFields):
     if (i < 4):
@@ -188,7 +190,7 @@ while True:
     root.update_idletasks()
     root.update()
     if(whoseTurn == 0):
-        choice = AI.makeDecision(smallFieldsArray, basesArray)
+        choice = AI.makeDecision(smallFieldsArray, basesArray, whoseTurn)
         print("turn: ", turn)
         print("AI clicking: ", choice) 
         buttonClick(smallFieldsArray[choice], choice)
@@ -197,4 +199,13 @@ while True:
     if (whoseTurn == 1 and printed == 0):
         print("-----------next turn: ", whoseTurn, " -------------")
         printed = 1
+
+    # Comment all the lines below to play agains AI
+    if(whoseTurn == 1):
+        # Maxmin against maxmin
+        choice = AI.makeDecision(smallFieldsArray, basesArray, whoseTurn)
+        # Maxmin against random
+        #choice = randint(6,11)
+        buttonClick(smallFieldsArray[choice], choice)
+
 

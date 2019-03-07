@@ -17,17 +17,21 @@ class AI:
 
         return gameFields
 
-    def movePrototype(self, gameFields, choice):
+    def move(self, gameFields, choice):
         whoseTurn = 0
         if choice > 5:
             whoseTurn = 1
-        #print("Turn of player: ", whoseTurn, "choice: ", choice)
-        #print("Board before: ", gameFields)
+
+
         startingIndex = choice + 1
         i = choice + 1
         value = gameFields[choice]
         gameFields[choice] = 0
+
+        # increment correct fields
         while(i < choice+1+value):
+
+            # skip the base of the opponent
             if(whoseTurn == 0 and startingIndex != 13):
                 gameFields[startingIndex] += 1
             elif(whoseTurn == 1 and startingIndex != 6):
@@ -39,15 +43,17 @@ class AI:
                 else:
                     startingIndex += 1
                     gameFields[startingIndex] += 1
+
             i += 1
             startingIndex += 1
+
+
             oppositeIndex = 5 + 2 + (7 - startingIndex-1)
-            #if(i == choice+1+value and whoseTurn == 0 and startingIndex-1 < 6) : 
-                #print("Starting index: ", gameFields[startingIndex-1] - 1, " opposite index: ", gameFields[oppositeIndex])
+            # check if a current player gets to make another move
             if(i == choice+1+value and ((whoseTurn == 0 and startingIndex-1 == 6) or (whoseTurn == 1 and startingIndex-1 == 13))):
                 whoseTurn = whoseTurn
+            # check if a "steal" occures 
             elif(i == choice+1+value and gameFields[oppositeIndex] != 0 and gameFields[startingIndex-1]-1 == 0 and((whoseTurn == 0 and startingIndex-1 < 6) or (whoseTurn == 1 and startingIndex-1 > 6 and startingIndex-1 < 13))):
-                #print("Whose turn: ", whoseTurn, " Starting index: ", startingIndex, " Opposite index: ", oppositeIndex)
                 if(whoseTurn == 0):
                     gameFields[6] += gameFields[oppositeIndex] + 1
                     gameFields[startingIndex-1] = 0
@@ -60,88 +66,93 @@ class AI:
             elif(i == choice+1+value):
                 whoseTurn = -1 * whoseTurn + 1
 
+            # reset counting of field increment
             if(startingIndex == 14):
                 startingIndex = 0
 
+            # calculate game field if the end-game was reached (not sure if it works correctly) 
             if(gameFields[0] == 0 and gameFields[1] == 0 and gameFields[2] == 0 and gameFields[3] == 0 and gameFields[4] == 0 and gameFields[5] == 0):
                 gameFields[13] = gameFields[13] + gameFields[7] + gameFields[8] + gameFields[9] + gameFields[10] + gameFields[11] + gameFields[12]
                 for i in range(7, 13):
                     gameFields[i] = 0
                 break
-                print("here")
+                
             elif(gameFields[7] == 0 and gameFields[8] == 0 and gameFields[9] == 0 and gameFields[10] == 0 and gameFields[11] == 0 and gameFields[12] == 0):
                 gameFields[6] = gameFields[6] + gameFields[0] + gameFields[1] + gameFields[2] + gameFields[3] + gameFields[4] + gameFields[5]
                 for i in range(0, 6):
                     gameFields[i] = 0
                 break
-                print("here2")
+                
 
         #print("Board after: ", gameFields)
         return gameFields, whoseTurn
-
-
-
-
-    def move(self, gameFields, i):
-        if i < 6: 
-            return gameFields, 1
-        else:
-            return gameFields, 0
         
-
-    def findBestMove(self, gameFields, whoseTurn, searchtreeDepth):
-        noOfAvailableMoves = 6 # actually it is 6 as there are 6 fields that can be choosen, but this is to be used to iterate over fields
+    def findBestMove(self, gameFields, whoseTurn, searchtreeDepth, numberOfAnalyzedStates):
+        noOfAvailableMoves = 6
+        numberOfAnalyzedStates[0] += 1
         moveScore = []
         startingField = 0
         endingField = 6
         temp_gameFields = gameFields[:]
         whoseTurnAtCurrentDepth = whoseTurn
+
         if (whoseTurn == 1):
             startingField = 7
             endingField = 13
 
-        if(searchtreeDepth == 5):
-            #print("At search tree depth 3 the score is: ", base[0], " ", base[1])
-            #print("Depth 2, board: ",  gameFields)
-            #print("Score: ", temp_gameFields[6] - temp_gameFields[13])
+        # terminate at this depth
+        if(searchtreeDepth == 7):
             return temp_gameFields[6] - temp_gameFields[13]
         else:
+            # try out each possible move
             for i in range(startingField, endingField):
                 temp_gameFields = gameFields[:]
                 if(temp_gameFields[i] == 0):
                     moveScore.append(temp_gameFields[6] - temp_gameFields[13])
                     continue
                 else:
-                    #print("turn of player: ", whoseTurn, " choosing field: ", i)
-                    temp_gameFields, whoseTurn = self.movePrototype(temp_gameFields, i)
+                    # calculate the state resulting from current move
+                    temp_gameFields, whoseTurn = self.move(temp_gameFields, i)
                     
-                    moveScore.append(self.findBestMove(temp_gameFields, whoseTurn, searchtreeDepth+1))
+                    # call the function recursively (advance in depth - DFS)
+                    moveScore.append(self.findBestMove(temp_gameFields, whoseTurn, searchtreeDepth+1, numberOfAnalyzedStates))
                     whoseTurn = -1 * whoseTurn + 1
         
+        # return the most optimal move
         if searchtreeDepth == 0:
-            maxScore = np.argmax(moveScore)
+            
+            moveScore = np.asarray(moveScore)
+            # using random tie-breaking
+            maxScore = np.random.choice(np.flatnonzero(moveScore == moveScore.max()))
+
+            # choosing the first argument that has max value
+            # maxScore = np.argmax(moveScore)
             while(gameFields[maxScore] == 0):
+                # if a field with 0 pebbles was chosen, choose another time
                 moveScore[maxScore] = -100
-                maxScore = np.argmax(moveScore)
-            print(moveScore)
+                maxScore = np.random.choice(np.flatnonzero(moveScore == moveScore.max()))
+                # maxScore = np.argmax(moveScore)
+            print("Score ranking of each move: ", moveScore[::-1])
             return maxScore
+        # return score in case of a max node
         if(whoseTurnAtCurrentDepth == 0):
-            #print("At search tree depth: ", searchtreeDepth,  " the move score is: ",  moveScore, ". Choosing max: ", max(moveScore))
-           #print("Depth(max node): ", searchtreeDepth, " score: ", moveScore)
             return max(moveScore)
+        # return score in case of a min node
         if(whoseTurnAtCurrentDepth == 1):
-            #print("At search tree depth: ", searchtreeDepth,  " the move score is: ",  moveScore, ". Choosing max: ", max(moveScore))
-            #print("Depth(max node): ", searchtreeDepth, " score: ", moveScore)
             return min(moveScore)
 
-    def makeDecision(self, smallFieldsArray, basesArray):
+    def makeDecision(self, smallFieldsArray, basesArray, whoseTurn):
         searchtreeDepth = 0
-        whoseTurn = 0
+        # extract an array of fields from the current state
         gameFields = self.extractGameState(smallFieldsArray, basesArray)
         
+        # analyzed states counter
+        numberOfAnalyzedStates = []
+        numberOfAnalyzedStates.append(0)
         
-        choice = self.findBestMove(gameFields, whoseTurn, searchtreeDepth)
-        #print(gameFields)
+        # call the function finding the most optimal move
+        choice = self.findBestMove(gameFields, whoseTurn, searchtreeDepth, numberOfAnalyzedStates)
+        print("Number of Analyzed states: ", numberOfAnalyzedStates)
         return choice
 
     
