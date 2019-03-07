@@ -21,42 +21,49 @@ class AI:
         whoseTurn = 0
         if choice > 5:
             whoseTurn = 1
-        
+        #print("Turn of player: ", whoseTurn, "choice: ", choice)
+        #print("Board before: ", gameFields)
         startingIndex = choice + 1
         i = choice + 1
         value = gameFields[choice]
         gameFields[choice] = 0
-
         while(i < choice+1+value):
-            if(whoseTurn == 0 and startingIndex == 13):
-                gameFields[0] += 1
-                startingIndex = 0
-            elif(whoseTurn == 1 and startingIndex == 6):
-                gameFields[startingIndex + 1] += 1
-                startingIndex += 1
-            else:   
+            if(whoseTurn == 0 and startingIndex != 13):
                 gameFields[startingIndex] += 1
-
-            oppositeField = 5 + 2 + (5 - startingIndex)
-            if(i+1 == choice+1+value and ((whoseTurn == 0 and i < 6) or (whoseTurn == 1 and i > 6)) and gameFields[oppositeField] != 0):
+            elif(whoseTurn == 1 and startingIndex != 6):
+                gameFields[startingIndex] += 1
+            else: 
                 if(whoseTurn == 0):
-                    gameFields[6] = gameFields[6] + gameFields[oppositeField] + gameFields[startingIndex]
-                else: 
-                    gameFields[13] = gameFields[6] + gameFields[oppositeField] + gameFields[startingIndex]
-                gameFields[oppositeField] = 0
-                gameFields[startingIndex] = 0
+                    startingIndex = 0
+                    gameFields[startingIndex] += 1
+                else:
+                    startingIndex += 1
+                    gameFields[startingIndex] += 1
+            i += 1
+            startingIndex += 1
+            oppositeIndex = 5 + 2 + (7 - startingIndex-1)
+            #if(i == choice+1+value and whoseTurn == 0 and startingIndex-1 < 6) : 
+                #print("Starting index: ", gameFields[startingIndex-1] - 1, " opposite index: ", gameFields[oppositeIndex])
+            if(i == choice+1+value and ((whoseTurn == 0 and startingIndex-1 == 6) or (whoseTurn == 1 and startingIndex-1 == 13))):
+                whoseTurn = whoseTurn
+            elif(i == choice+1+value and gameFields[oppositeIndex] != 0 and gameFields[startingIndex-1]-1 == 0 and((whoseTurn == 0 and startingIndex-1 < 6) or (whoseTurn == 1 and startingIndex-1 > 6 and startingIndex-1 < 13))):
+                #print("Whose turn: ", whoseTurn, " Starting index: ", startingIndex, " Opposite index: ", oppositeIndex)
+                if(whoseTurn == 0):
+                    gameFields[6] += gameFields[oppositeIndex] + 1
+                    gameFields[startingIndex-1] = 0
+                    gameFields[oppositeIndex] = 0
+                else :
+                    gameFields[13] += gameFields[oppositeIndex] + 1
+                    gameFields[startingIndex-1] = 0
+                    gameFields[oppositeIndex] = 0
+                whoseTurn = -1 * whoseTurn + 1
+            elif(i == choice+1+value):
+                whoseTurn = -1 * whoseTurn + 1
 
-            startingIndex = startingIndex + 1
             if(startingIndex == 14):
                 startingIndex = 0
 
-            if (i+1 == choice+1+value and ((startingIndex - 1 == 6 and whoseTurn == 0) or (startingIndex-1 == 13 and whoseTurn == 1))):
-                continue
-            else:
-                whoseTurn = -1 * whoseTurn + 1
-            i = i + 1
-
-            
+        #print("Board after: ", gameFields)
         return gameFields, whoseTurn
 
 
@@ -80,10 +87,10 @@ class AI:
             startingField = 7
             endingField = 13
 
-        if(searchtreeDepth == 1):
+        if(searchtreeDepth == 5):
             #print("At search tree depth 3 the score is: ", base[0], " ", base[1])
-            print("Depth 1, board: ",  gameFields)
-            print("Score: ", temp_gameFields[6] - temp_gameFields[13])
+            #print("Depth 2, board: ",  gameFields)
+            #print("Score: ", temp_gameFields[6] - temp_gameFields[13])
             return temp_gameFields[6] - temp_gameFields[13]
         else:
             for i in range(startingField, endingField):
@@ -94,6 +101,7 @@ class AI:
                 else:
                     #print("turn of player: ", whoseTurn, " choosing field: ", i)
                     temp_gameFields, whoseTurn = self.movePrototype(temp_gameFields, i)
+                    
                     moveScore.append(self.findBestMove(temp_gameFields, whoseTurn, searchtreeDepth+1))
                     whoseTurn = -1 * whoseTurn + 1
         
@@ -102,14 +110,15 @@ class AI:
             while(gameFields[maxScore] == 0):
                 moveScore[maxScore] = -100
                 maxScore = np.argmax(moveScore)
+            print(moveScore)
             return maxScore
         if(whoseTurnAtCurrentDepth == 0):
             #print("At search tree depth: ", searchtreeDepth,  " the move score is: ",  moveScore, ". Choosing max: ", max(moveScore))
-            print("Depth(max node): ", searchtreeDepth, " score: ", moveScore)
+           #print("Depth(max node): ", searchtreeDepth, " score: ", moveScore)
             return max(moveScore)
         if(whoseTurnAtCurrentDepth == 1):
             #print("At search tree depth: ", searchtreeDepth,  " the move score is: ",  moveScore, ". Choosing max: ", max(moveScore))
-            print("Depth(max node): ", searchtreeDepth, " score: ", moveScore)
+            #print("Depth(max node): ", searchtreeDepth, " score: ", moveScore)
             return min(moveScore)
 
     def makeDecision(self, smallFieldsArray, basesArray):

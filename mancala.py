@@ -12,6 +12,7 @@ noOfSmallFields = 6 * noOfPlayers
 noOfBases = noOfPlayers
 whoseTurn = randint(0,1)
 print(whoseTurn)
+turn = 0
 
 smallFieldsArray = []
 basesArray = []
@@ -182,6 +183,8 @@ while True:
     root.update()
     if(whoseTurn == 0):
         choice = AI.makeDecision(smallFieldsArray, basesArray)
+        print("turn: ", turn)
         print("AI clicking: ", choice) 
         buttonClick(smallFieldsArray[choice], choice)
+        turn += 1
 
