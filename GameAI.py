@@ -63,6 +63,19 @@ class AI:
             if(startingIndex == 14):
                 startingIndex = 0
 
+            if(gameFields[0] == 0 and gameFields[1] == 0 and gameFields[2] == 0 and gameFields[3] == 0 and gameFields[4] == 0 and gameFields[5] == 0):
+                gameFields[13] = gameFields[13] + gameFields[7] + gameFields[8] + gameFields[9] + gameFields[10] + gameFields[11] + gameFields[12]
+                for i in range(7, 13):
+                    gameFields[i] = 0
+                break
+                print("here")
+            elif(gameFields[7] == 0 and gameFields[8] == 0 and gameFields[9] == 0 and gameFields[10] == 0 and gameFields[11] == 0 and gameFields[12] == 0):
+                gameFields[6] = gameFields[6] + gameFields[0] + gameFields[1] + gameFields[2] + gameFields[3] + gameFields[4] + gameFields[5]
+                for i in range(0, 6):
+                    gameFields[i] = 0
+                break
+                print("here2")
+
         #print("Board after: ", gameFields)
         return gameFields, whoseTurn
 

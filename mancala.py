@@ -37,6 +37,7 @@ def checkIfEnd():
         #print(basesArray[1]['text']) # print the base value before adding the remaining pebbles
         for i in range(6, 12):
             basesArray[1]['text'] = str(int(basesArray[1]['text']) + int(smallFieldsArray[i]['text']))
+        return true
     else:
         counter = 0
         for i in range(6,12):
@@ -51,6 +52,9 @@ def checkIfEnd():
     if (counter == 6):
         for i in range(0,12):
             smallFieldsArray[i].config(state='disabled', text='0')
+        print("Score of player 0: ", basesArray[0]['text'])
+        print("Score of player 1: ", basesArray[1]['text'])
+        return True
 
 # function for checking if something hasnt been fucked up
 def checkSum():
@@ -128,7 +132,9 @@ def buttonClick(button, buttonID):
     whoseTurn = -1 * whoseTurn + 1
     disableButtons()
     checkSum()
-    checkIfEnd()
+    if(checkIfEnd()):
+        print("End of game")
+        exit()
     return 
 
 def setupBoard():
@@ -177,7 +183,7 @@ setupBoard()
 disableButtons()
 AI = GameAI.AI()
 
-
+printed = 0
 while True:
     root.update_idletasks()
     root.update()
@@ -187,4 +193,8 @@ while True:
         print("AI clicking: ", choice) 
         buttonClick(smallFieldsArray[choice], choice)
         turn += 1
+        printed = 0
+    if (whoseTurn == 1 and printed == 0):
+        print("-----------next turn: ", whoseTurn, " -------------")
+        printed = 1
 
