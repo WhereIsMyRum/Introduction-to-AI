@@ -87,8 +87,7 @@ class AI:
         #print("Board after: ", gameFields)
         return gameFields, whoseTurn
         
-    def findBestMove(self, gameFields, whoseTurn, searchtreeDepth, numberOfAnalyzedStates, alpha, beta):
-        v = 0
+    def findBestMove(self, gameFields, whoseTurn, searchtreeDepth, numberOfAnalyzedStates):
         noOfAvailableMoves = 6
         numberOfAnalyzedStates[0] += 1
         moveScore = []
@@ -100,9 +99,6 @@ class AI:
         if (whoseTurn == 1):
             startingField = 7
             endingField = 13
-            v = beta
-        else :
-            v = alpha
 
         # terminate at this depth
         if(searchtreeDepth == 5):
@@ -111,15 +107,6 @@ class AI:
             # try out each possible move
             for i in range(startingField, endingField):
                 temp_gameFields = gameFields[:]
-
-                # check for pruning
-                if(whoseTurnAtCurrentDepth == 0 and v > beta):
-                    #print("pruned at depth: ", searchtreeDepth,  " v: ", v, " beta: ", beta)
-                    break
-                elif whoseTurnAtCurrentDepth == 1 and v < alpha :
-                    #print("pruned at depth: ", searchtreeDepth,  " v: ", v, " alpha: ", alpha)
-                    break
-
                 if(temp_gameFields[i] == 0):
                     moveScore.append(temp_gameFields[6] - temp_gameFields[13])
                     continue
@@ -127,21 +114,10 @@ class AI:
                     # calculate the state resulting from current move
                     temp_gameFields, whoseTurn = self.move(temp_gameFields, i)
                     
-                    #if (whoseTurn == 0 and temp_gameFields[6] - temp_gameFields[13])
                     # call the function recursively (advance in depth - DFS)
-                    moveScore.append(self.findBestMove(temp_gameFields, whoseTurn, searchtreeDepth+1, numberOfAnalyzedStates,  alpha, beta))
+                    moveScore.append(self.findBestMove(temp_gameFields, whoseTurn, searchtreeDepth+1, numberOfAnalyzedStates))
                     whoseTurn = -1 * whoseTurn + 1
-                    if(whoseTurnAtCurrentDepth == 0) :
-                        if( moveScore[-1] > v):
-                            #print("turn 0, moveScore[-1]: ", moveScore[-1],  " v: ", v)
-                            v = moveScore[-1]
-                        alpha = max(moveScore)
-                    elif (whoseTurnAtCurrentDepth == 1):
-                        if (moveScore[-1] < v):
-                            #print("turn 1, moveScore[-1]: ", moveScore[-1],  " v: ", v)
-                            v = moveScore[-1]
-                        beta = min(moveScore)
-                    
+        
         # return the most optimal move
         if searchtreeDepth == 0:
             
@@ -160,16 +136,10 @@ class AI:
             return maxScore
         # return score in case of a max node
         if(whoseTurnAtCurrentDepth == 0):
-            if not moveScore:
-                return 50
-            else:
-                return max(moveScore)
+            return max(moveScore)
         # return score in case of a min node
         if(whoseTurnAtCurrentDepth == 1):
-            if not moveScore:
-                return -50
-            else:
-                return min(moveScore)
+            return min(moveScore)
 
     def makeDecision(self, smallFieldsArray, basesArray, whoseTurn):
         searchtreeDepth = 0
@@ -179,11 +149,9 @@ class AI:
         # analyzed states counter
         numberOfAnalyzedStates = []
         numberOfAnalyzedStates.append(0)
-        alpha = -50
-        beta = 50
         
         # call the function finding the most optimal move
-        choice = self.findBestMove(gameFields, whoseTurn, searchtreeDepth, numberOfAnalyzedStates, alpha, beta)
+        choice = self.findBestMove(gameFields, whoseTurn, searchtreeDepth, numberOfAnalyzedStates)
         print("Number of Analyzed states: ", numberOfAnalyzedStates)
         return choice
 

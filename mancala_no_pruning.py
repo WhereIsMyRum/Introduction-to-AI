@@ -183,8 +183,8 @@ for i in range(0,noOfSmallFields):
 ## start the game
 setupBoard()
 disableButtons()
-#AI = GameAI_old.AI()
-AI = GameAI.AI()
+AI = GameAI_no_pruning.AI()
+#AI = GameAI.AI()
 
 printed = 0
 while True:
