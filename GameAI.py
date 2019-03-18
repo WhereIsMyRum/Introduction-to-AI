@@ -51,7 +51,7 @@ class AI:
             oppositeIndex = 5 + 2 + (7 - startingIndex-1)
             # check if a current player gets to make another move
             if(i == choice+1+value and ((whoseTurn == 0 and startingIndex-1 == 6) or (whoseTurn == 1 and startingIndex-1 == 13))):
-                whoseTurn = whoseTurn
+                continue
             # check if a "steal" occures 
             elif(i == choice+1+value and gameFields[oppositeIndex] != 0 and gameFields[startingIndex-1]-1 == 0 and((whoseTurn == 0 and startingIndex-1 < 6) or (whoseTurn == 1 and startingIndex-1 > 6 and startingIndex-1 < 13))):
                 if(whoseTurn == 0):
