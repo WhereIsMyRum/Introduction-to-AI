@@ -1,6 +1,6 @@
 from tkinter import *
 from random import randint
-import GameAI_no_pruning, GameAI
+import GameAI_no_pruning, GameAI, RandomMonteCarloAI
 import time
 
 
@@ -17,6 +17,17 @@ turn = 0
 smallFieldsArray = []
 basesArray = []
 buttonIDs = [0,1,2,3,4,5,6,7,8]
+
+playerNo0Starts = 0
+playerNo1Starts = 0
+playerNo0Wins = 0
+playerNo1Wins = 0
+numberOfGames = 0
+
+if (whoseTurn == 0):
+    playerNo0Starts += 1
+else :
+    playerNo1Starts += 1
 
 def disableButtons():
     val = 2 if whoseTurn == 0 else 1
@@ -62,7 +73,7 @@ def checkSum():
         suma = suma + int(smallFieldsArray[i]['text'])
     for i in range(0,2):
         suma = suma + int(basesArray[i]['text'])
-    print(suma)
+    #print(suma)
 
 def increaseButtonValue(button):
     temp_value = int(button['text'])
@@ -86,12 +97,11 @@ def checkForEmptyField(button, buttonIndex):
 
 def buttonClick(button, buttonID):
 
-    global whoseTurn
+    global whoseTurn, playerNo0Wins, playerNo1Wins, numberOfGames
     value = int(button['text'])
     button.config(text="0")
     startingIndex = int(buttonID)+1
     i = int(buttonID)+1
-
     while (i < int(buttonID)+value+1):
         # check if the points need to be inserted into left base
         if(startingIndex == 6 and whoseTurn == 0):
@@ -132,11 +142,25 @@ def buttonClick(button, buttonID):
     disableButtons()
     checkSum()
     if(checkIfEnd()):
-        print("End of game")
-        print("The game was started by: ", whoseTurnInitial)
-        print("Score of player 0: ", basesArray[0]['text'])
-        print("Score of player 1: ", basesArray[1]['text'])
-        exit()
+        numberOfGames += 1
+        #print("End of game")
+        #print("The game was started by: ", whoseTurnInitial)
+        #print("Score of player 0: ", basesArray[0]['text'])
+        #print("Score of player 1: ", basesArray[1]['text'])
+        if (int(basesArray[0]['text']) > int(basesArray[1]['text'])):
+            playerNo0Wins += 1
+        elif (int(basesArray[0]['text']) < int(basesArray[1]['text'])):
+            playerNo1Wins += 1
+        if numberOfGames == 100:
+            print("Player 0 wins: ", playerNo0Wins)
+            print("Player 1 wins: ", playerNo1Wins)
+            print("Draws: ", 100 - playerNo0Wins - playerNo1Wins)
+            print("Player 0 starts: ", playerNo0Starts)
+            print("Player 1 starts: ", playerNo1Starts)
+            exit()
+        else :
+            print("Game number: ", numberOfGames + 1)
+            resetBoard(smallFieldsArray, basesArray)
     return 
 
 def setupBoard():
@@ -168,6 +192,19 @@ def setupBoard():
         basesArray.append(Button(root, text="0", height = 10, width = 10, fg="blue", state='disabled'))
     basesArray[0].grid(row=0, column=7, rowspan=3)
     basesArray[1].grid(row=0, column=0, rowspan=3)
+
+def resetBoard(smallFieldsArray, basesArray):
+    global playerNo0Starts,  playerNo1Starts, whoseTurn
+    for field in smallFieldsArray:
+        field['text'] = 4
+    for base in basesArray:
+        base['text'] = 0
+    whoseTurn = randint(0,1)
+    if whoseTurn == 0:
+        playerNo0Starts += 1
+    else:
+        playerNo1Starts += 1
+    return
 '''
 for i in range(0,noOfSmallFields):
     if (i < 4):
@@ -185,28 +222,36 @@ setupBoard()
 disableButtons()
 #AI = GameAI_old.AI()
 AI = GameAI.AI()
+MonteAI = RandomMonteCarloAI.RandomMonteCarloAI()
 
 printed = 0
 while True:
     root.update_idletasks()
     root.update()
+
     if(whoseTurn == 0):
-        choice = AI.makeDecision(smallFieldsArray, basesArray, whoseTurn)
-        print("turn: ", turn)
-        print("AI clicking: ", choice) 
+    #    choice = AI.makeDecision(smallFieldsArray, basesArray, whoseTurn)
+        choice = MonteAI.makeDecision(smallFieldsArray, basesArray, whoseTurn)
+        #print("turn: ", turn)
+        #print("Monte-Carlo AI clicking: ", choice) 
         buttonClick(smallFieldsArray[choice], choice)
-        turn += 1
-        printed = 0
-    if (whoseTurn == 1 and printed == 0):
-        print("-----------next turn: ", whoseTurn, " -------------")
-        printed = 1
+        #turn += 1
+        #printed = 0
+    #if (whoseTurn == 1 and printed == 0):
+    #if (whoseTurn == 0 and printed == 0):
+    #    print("-----------next turn: ", whoseTurn, " -------------")
+    #    printed = 1
 
     # Comment all the lines below to play agains AI
-    #if(whoseTurn == 1):
+    if(whoseTurn == 1):
     #    # Maxmin against maxmin
     #    choice = AI.makeDecision(smallFieldsArray, basesArray, whoseTurn)
+         #choice = MonteAI.makeDecision(smallFieldsArray, basesArray, whoseTurn)
+    #    choice += 6
+    #    print("turn: ", turn)
+    #    print("Min-max AI clicking: ", choice) 
     #    # Maxmin against random
-    #    #choice = randint(6,11)
-    #    buttonClick(smallFieldsArray[choice], choice)
+        choice = randint(6,11)
+        buttonClick(smallFieldsArray[choice], choice)
 
 
