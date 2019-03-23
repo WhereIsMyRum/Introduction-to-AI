@@ -1,7 +1,7 @@
 from random import randint
 import numpy as np
 
-class RandomMonteCarloAI:
+class InformedMonteCarloAI:
 
     def extractGameState(self, smallFieldsArray, basesArray, whoseTurn):
         gameFields_temp = []
@@ -110,9 +110,13 @@ class RandomMonteCarloAI:
         
         for i in range(0, numberOfSearches):
             temp_gameFields_copy = temp_gameFields[:]
-            next_move = np.random.randint(startingField, endingField) 
-            while (temp_gameFields_copy[next_move] == 0):
+            next_move = 0
+            if (whoseTurn == 1): 
                 next_move = np.random.randint(startingField, endingField) 
+                while (temp_gameFields_copy[next_move] == 0):
+                    next_move = np.random.randint(startingField, endingField)
+            else:
+                next_move = self.prioritizeDoubleMove(temp_gameFields_copy) 
             score += self.monteCarloSearch(next_move, temp_gameFields_copy, whoseTurn,  numberOfAnalyzedStates, 1)
         return score
 
@@ -134,14 +138,12 @@ class RandomMonteCarloAI:
         for i in range(0,len(availableMoves)):
             temp_gameFields = gameFields[:]
             moveScore.append(self.monteCarloSearch(availableMoves[i], temp_gameFields, whoseTurn, numberOfAnalyzedStates, numberOfSearches))
-
-
+        #printprint("Monte Carlo move score: ", moveScore)
         move = np.argmax(moveScore)
-        # prevent the AI from choosing an empty field
         while (gameFields[move] == 0):
             moveScore[move] = -1
             move = np.argmax(moveScore)
-        
+        #print ("monte carlo chooses: ", move)
         return availableMoves[move]
 
     def makeDecision(self, smallFieldsArray, basesArray, whoseTurn):
@@ -170,6 +172,21 @@ class RandomMonteCarloAI:
                 playerTwo = False
 
         return playerOne or playerTwo
+
+    def prioritizeDoubleMove(self, temp_gameFields_copy):
+        available_double_moves = []
+        for i in range(0,6):
+            if (temp_gameFields_copy[i] + i == 6):
+                available_double_moves.append(i)
+
+        if (len(available_double_moves) == 0):
+            return np.random.randint(0,6)
+        else:
+            choice = np.random.randint(0,len(available_double_moves))
+            return available_double_moves[choice]
+
+
+
 
     
                 
