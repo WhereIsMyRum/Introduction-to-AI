@@ -1,6 +1,6 @@
 from tkinter import *
 from random import randint
-import GameAI_no_pruning, GameAI, RandomMonteCarloAI, InformedMonteCarloAI
+import GameAI_no_pruning, GameAI, RandomMonteCarloAI, InformedMonteCarloAI, MonteCarloAI
 import time
 
 
@@ -12,6 +12,7 @@ noOfSmallFields = 6 * noOfPlayers
 noOfBases = noOfPlayers
 whoseTurnInitial = randint(0,1)
 whoseTurn = whoseTurnInitial
+
 turn = 0
 
 smallFieldsArray = []
@@ -45,7 +46,6 @@ def checkIfEnd():
         else:
             counter = counter + 1
     if (counter == 6):
-        #print(basesArray[1]['text']) # print the base value before adding the remaining pebbles
         for i in range(6, 12):
             basesArray[1]['text'] = str(int(basesArray[1]['text']) + int(smallFieldsArray[i]['text']))
         return True
@@ -57,7 +57,6 @@ def checkIfEnd():
             else:
                 counter = counter + 1
         if (counter == 6):
-            #print(basesArray[0]['text']) # print the base value before adding the remaining pebbles
             for i in range(0, 6):
                 basesArray[0]['text'] = str(int(basesArray[0]['text']) + int(smallFieldsArray[i]['text']))
     if (counter == 6):
@@ -66,14 +65,13 @@ def checkIfEnd():
         
         return True
 
-# function for checking if something hasnt been fucked up
+# function for checking if the total ammount of pebles (correctness check)
 def checkSum():
     suma = 0
     for i in range(0, 12):
         suma = suma + int(smallFieldsArray[i]['text'])
     for i in range(0,2):
         suma = suma + int(basesArray[i]['text'])
-    #print(suma)
 
 def increaseButtonValue(button):
     temp_value = int(button['text'])
@@ -90,7 +88,6 @@ def checkForEmptyField(button, buttonIndex):
         for  i in range(0,  temp_opposite_value +1 ):
             increaseButtonValue(basesArray[whoseTurn])
         smallFieldsArray[oppositeFieldIndex].config(text = "0")
-        #print('last was zero and opposite not empty! Stealing pebbles from ', oppositeFieldIndex)
     else:
         increaseButtonValue(button)
 
@@ -143,10 +140,6 @@ def buttonClick(button, buttonID):
     checkSum()
     if(checkIfEnd()):
         numberOfGames += 1
-        #print("End of game")
-        #print("The game was started by: ", whoseTurnInitial)
-        #print("Score of player 0: ", basesArray[0]['text'])
-        #print("Score of player 1: ", basesArray[1]['text'])
         if (int(basesArray[0]['text']) > int(basesArray[1]['text'])):
             playerNo0Wins += 1
             print("player 0 wins")
@@ -227,35 +220,37 @@ for i in range(0,noOfSmallFields):
 ## start the game
 setupBoard()
 disableButtons()
-#AI = GameAI_old.AI()
-AI = GameAI.AI()
+# pass a value to change the search tree depth
+MinMaxAI_1 = GameAI.AI(2)
+MinMaxAI_2 = GameAI.AI(2)
 RandomMonteAI = RandomMonteCarloAI.RandomMonteCarloAI()
 InformedMonteAI = InformedMonteCarloAI.InformedMonteCarloAI()
+MonteCarloAI = MonteCarloAI.MonteCarloAI(500)
+#choice = MonteCarloAI.makeDecision(smallFieldsArray, basesArray, whoseTurn)
 
 printed = 0
 while True:
     root.update_idletasks()
     root.update()
     if(whoseTurn == 0):
-    #    choice = AI.makeDecision(smallFieldsArray, basesArray, whoseTurn)
-        choice = RandomMonteAI.makeDecision(smallFieldsArray, basesArray, whoseTurn)
-    #    choice = InformedMonteAI.makeDecision(smallFieldsArray, basesArray, whoseTurn)
+    #    choice = MinMaxAI_1.makeDecision(smallFieldsArray, basesArray, whoseTurn)
+        choice = MonteCarloAI.makeDecision(smallFieldsArray, basesArray, whoseTurn)
+    #    choice = randint(0,6)
         buttonClick(smallFieldsArray[choice], choice)
-        turn += 1
+     #   turn += 1
 
     #if (whoseTurn == 1 and printed == 0):
     #    print("-----------next turn: ", whoseTurn, " -------------")
     #    printed = 1
 
-    # Comment all the lines below to play agains AI
-    if(whoseTurn == 1):
-        choice = AI.makeDecision(smallFieldsArray, basesArray, whoseTurn)
-    #    choice = RandomMonteAI.makeDecision(smallFieldsArray, basesArray, whoseTurn)
-    #    choice = InformedMonteAI.makeDecision(smallFieldsArray, basesArray, whoseTurn)
-        choice += 6  #very important
-        turn += 1
+    # Comment all the lines below to play against AI
+    #if(whoseTurn == 1):
+    #    choice = MinMaxAI_2.makeDecision(smallFieldsArray, basesArray, whoseTurn)
+    #    choice = MonteCarloAI.makeDecision(smallFieldsArray, basesArray, whoseTurn)
+   #     choice += 6  #very important!!!!
+    #    turn += 1
     #    Maxmin against random
     #    choice = randint(6,11)
-        buttonClick(smallFieldsArray[choice], choice)
+    #    buttonClick(smallFieldsArray[choice], choice)
 
 

@@ -2,7 +2,11 @@ from random import randint
 import numpy as np
 class AI:
 
+    def __init__(self, maxTreeDepth):
+        self.maxTreeDepth = maxTreeDepth
+
     def extractGameState(self, smallFieldsArray, basesArray, whoseTurn):
+        #
         gameFields_temp = []
         gameFields = []
         for i in range(0, 14):
@@ -16,6 +20,8 @@ class AI:
                 gameFields_temp.append(int(basesArray[1]['text']))
         if(whoseTurn == 0):
             gameFields = gameFields_temp
+        # if it is player 1 turn then invert the board 
+        # (the algorithm only knows how to play from one side)
         else: 
             for i in range(7,14):
                 gameFields.append(gameFields_temp[i])
@@ -112,7 +118,7 @@ class AI:
             v = alpha
 
         # terminate at this depth
-        if(searchtreeDepth == 5):
+        if(searchtreeDepth == self.maxTreeDepth):
             return temp_gameFields[6] - temp_gameFields[13]
         else:
             # try out each possible move
@@ -134,28 +140,25 @@ class AI:
                     # calculate the state resulting from current move
                     temp_gameFields, whoseTurn = self.move(temp_gameFields, i)
                     
-                    #if (whoseTurn == 0 and temp_gameFields[6] - temp_gameFields[13])
+
                     # call the function recursively (advance in depth - DFS)
                     moveScore.append(self.findBestMove(temp_gameFields, whoseTurn, searchtreeDepth+1, numberOfAnalyzedStates,  alpha, beta))
-                    whoseTurn = -1 * whoseTurn + 1
+                    #whoseTurn = -1 * whoseTurn + 1
+                    # update alpha and beta values
                     if(whoseTurnAtCurrentDepth == 0) :
                         if( moveScore[-1] > v):
-                            #print("turn 0, moveScore[-1]: ", moveScore[-1],  " v: ", v)
                             v = moveScore[-1]
                         alpha = max(moveScore)
                     elif (whoseTurnAtCurrentDepth == 1):
                         if (moveScore[-1] < v):
-                            #print("turn 1, moveScore[-1]: ", moveScore[-1],  " v: ", v)
                             v = moveScore[-1]
                         beta = min(moveScore)
                     
         # return the most optimal move
         if searchtreeDepth == 0:
-            
             moveScore = np.asarray(moveScore)
             # using random tie-breaking
             maxScore = np.random.choice(np.flatnonzero(moveScore == moveScore.max()))
-
             # choosing the first argument that has max value
             #maxScore = np.argmax(moveScore)
             while(gameFields[maxScore] == 0):
@@ -163,14 +166,15 @@ class AI:
                 moveScore[maxScore] = -100
                 maxScore = np.random.choice(np.flatnonzero(moveScore == moveScore.max()))
                 #maxScore = np.argmax(moveScore)
-            #print("Score ranking of each move: ", moveScore[::-1])
             return maxScore
+
         # return score in case of a max node
         if(whoseTurnAtCurrentDepth == 0):
             if not moveScore:
                 return 50
             else:
                 return max(moveScore)
+
         # return score in case of a min node
         if(whoseTurnAtCurrentDepth == 1):
             if not moveScore:
@@ -187,6 +191,7 @@ class AI:
         # analyzed states counter
         numberOfAnalyzedStates = []
         numberOfAnalyzedStates.append(0)
+        #  pruning
         alpha = -50
         beta = 50
         
