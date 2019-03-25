@@ -183,7 +183,7 @@ class MonteCarloAI:
                 if(not node.childNodes[i].explored):
                     node.childNodes[i].explored = True
                     return node.childNodes[i]
-                node_score = node.childNodes[i].noOfWins / node.childNodes[i].noOfGames + 1.4 * sqrt(log(self.totalGamesPlayed)/node.childNodes[i].noOfGames)
+                node_score = node.childNodes[i].noOfWins / node.childNodes[i].noOfGames + 1.4 * sqrt(log(self.node.noOfGames)/node.childNodes[i].noOfGames)
                 if (node_score > max_score and whoseTurn == 0):
                     max_score = node_score
                     node_to_return = node.childNodes[i]

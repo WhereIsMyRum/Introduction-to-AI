@@ -212,7 +212,7 @@ disableButtons()
 # pass a value to change the search tree depth
 MinMaxAI_1 = GameAI.AI(2)
 MinMaxAI_2 = GameAI.AI(2)
-MonteCarloAI = MonteCarloAI.MonteCarloAI(20000)
+MonteCarloAI = MonteCarloAI.MonteCarloAI(30000)
 
 
 while True:
