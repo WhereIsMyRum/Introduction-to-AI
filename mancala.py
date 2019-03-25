@@ -201,20 +201,9 @@ def resetBoard(smallFieldsArray, basesArray):
         playerNo0Starts += 1
     else:
         playerNo1Starts += 1
-    print("resetting turn")
     global turn
     turn = 0
     return
-'''
-for i in range(0,noOfSmallFields):
-    if (i < 4):
-        smallFieldsArray.append(Button(root, text="4", height = 5,  width = 10, fg="red", command=lambda: buttonClick(buttonIDs[i])))
-        smallFieldsArray[i].grid(row=0, column=i+1)
-    else :
-        smallFieldsArray.append(Button(root, text="4", height = 5,  width = 10, fg="green", command=lambda: buttonClick(buttonIDs[i])))
-        smallFieldsArray[i].grid(row=2, column=i-3)
-'''
-
 
 
 ## start the game
@@ -223,12 +212,9 @@ disableButtons()
 # pass a value to change the search tree depth
 MinMaxAI_1 = GameAI.AI(2)
 MinMaxAI_2 = GameAI.AI(2)
-RandomMonteAI = RandomMonteCarloAI.RandomMonteCarloAI()
-InformedMonteAI = InformedMonteCarloAI.InformedMonteCarloAI()
-MonteCarloAI = MonteCarloAI.MonteCarloAI(500)
-#choice = MonteCarloAI.makeDecision(smallFieldsArray, basesArray, whoseTurn)
+MonteCarloAI = MonteCarloAI.MonteCarloAI(20000)
 
-printed = 0
+
 while True:
     root.update_idletasks()
     root.update()
@@ -237,20 +223,14 @@ while True:
         choice = MonteCarloAI.makeDecision(smallFieldsArray, basesArray, whoseTurn)
     #    choice = randint(0,6)
         buttonClick(smallFieldsArray[choice], choice)
-     #   turn += 1
 
-    #if (whoseTurn == 1 and printed == 0):
-    #    print("-----------next turn: ", whoseTurn, " -------------")
-    #    printed = 1
 
     # Comment all the lines below to play against AI
-    #if(whoseTurn == 1):
-    #    choice = MinMaxAI_2.makeDecision(smallFieldsArray, basesArray, whoseTurn)
+    if(whoseTurn == 1):
+        choice = MinMaxAI_2.makeDecision(smallFieldsArray, basesArray, whoseTurn)
     #    choice = MonteCarloAI.makeDecision(smallFieldsArray, basesArray, whoseTurn)
-   #     choice += 6  #very important!!!!
-    #    turn += 1
-    #    Maxmin against random
-    #    choice = randint(6,11)
-    #    buttonClick(smallFieldsArray[choice], choice)
+    #    choice = randint(0,6)
+        choice += 6  #very important!!!
+        buttonClick(smallFieldsArray[choice], choice)
 
 

@@ -87,14 +87,13 @@ class MonteCarloAI:
                 for i in range(0, 6):
                     gameFields[i] = 0
                 break
-            
-        #print("Board after: ", gameFields)
+
         return gameFields, whoseTurn
 
 
     def makeDecision(self, smallFieldsArray, basesArray, whoseTurn):
         global numberOfNodes
-        # extract an array of fields from the current state
+
         gameFields = self.extractGameState(smallFieldsArray, basesArray, whoseTurn)
         whoseTurn = 0
         rootNode = Node(gameFields, whoseTurn, 0, True)
@@ -109,21 +108,10 @@ class MonteCarloAI:
                 if(max_games < rootNode.childNodes[i].noOfGames):
                     max_games = rootNode.childNodes[i].noOfGames
                     node_to_return = i
-        #for i in range(0,6):
-            #print("base node: ", i, " games played/games won: ", rootNode.childNodes[i].noOfGames, "/", rootNode.childNodes[i].noOfWins)
-        #    for j in range(0,6):
-        #       if (rootNode.childNodes[i].childNodes[j] != 0):
-                    #print("node: ", j,  " games played/games won: ", rootNode.childNodes[i].childNodes[j].noOfGames, "/", rootNode.childNodes[i].childNodes[j].noOfWins )
         self.totalGamesPlayed = 0
-        #print("node to return: ", node_to_return)
 
-        #print(numberOfNodes)
         return node_to_return
             
-        
-        
-        
-
     def checkForGameEnd(self, gameFields):
         playerOne = True
         playerTwo = True
@@ -169,7 +157,6 @@ class MonteCarloAI:
 
         node_to_simulate = self.chooseBestNode(node, startField, endField, whoseTurn)
         if (node_to_simulate == 0):
-            print("here")
             if (node.gameState[6] + sum(node.gameState[0:5]) > 24):
                 self.update(node, 1)
             elif (node.gameState[13] + sum(node.gameState[7:12]) > 24):
@@ -216,7 +203,8 @@ class MonteCarloAI:
         if whoseTurn == 1:
             choice = randint(startField, endField-1)
         else:
-            choice = self.prioritizeDoubleMove(gameState[:])
+            #choice = self.prioritizeDoubleMove(gameState[:])
+            choice = randint(startField, endField-1)
         temp_gameState, whoseTurn = self.move(gameState[:],choice)
         if(self.checkForGameEnd(temp_gameState)):
             if temp_gameState[6] > temp_gameState[13]:
