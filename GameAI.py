@@ -60,8 +60,7 @@ class AI:
             i += 1
             startingIndex += 1
 
-
-            oppositeIndex = 5 + 2 + (7 - startingIndex-1)
+            oppositeIndex = 13 - startingIndex
             # check if a current player gets to make another move
             if(i == choice+1+value and ((whoseTurn == 0 and startingIndex-1 == 6) or (whoseTurn == 1 and startingIndex-1 == 13))):
                 continue

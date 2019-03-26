@@ -6,12 +6,12 @@ import matplotlib.pylab as plt
 # the order of game scores array (starting algorithm)
 # Random,  MCTS,  MM2, MM5, MM7, MM9,
 
-scores_against_rand = [44, 99,  100,  97, 99, 96]
-scores_against_mm2 = [4, 63, 94, 86, 91, 3]
-scores_against_mm5 = [4, 38, 84, 82, 90, 2]
-scores_against_mm7 = [2,  5, 36, 82, 82, 9]
-scores_against_mm9 = [0, 29, 75, 89, 82, 8]
-scores_against_mcts = [2, 99, 96, 100,  100, 53]
+scores_against_rand = [44, 96, 99,  100,  97, 99]
+scores_against_mm2 = [4, 3, 63, 94, 86, 91 ]
+scores_against_mm5 = [4, 2, 38, 84, 82, 90]
+scores_against_mm7 = [2, 9,  5, 36, 82, 82]
+scores_against_mm9 = [0, 8, 29, 75, 89, 82]
+scores_against_mcts = [2, 53, 99, 96, 100,  100]
 
 score_matrix = [scores_against_rand, scores_against_mcts, scores_against_mm2, scores_against_mm5, scores_against_mm7, scores_against_mm9]
 score_matrix = np.asarray(score_matrix)

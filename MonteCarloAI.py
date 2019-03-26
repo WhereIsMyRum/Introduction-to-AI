@@ -100,6 +100,7 @@ class MonteCarloAI:
 
         for i in range(0, self.numberOfSearches+1):
             self.expansion(rootNode, whoseTurn)
+            rootNode.noOfGames += 1
 
         max_games = 0
         node_to_return = 0
@@ -109,7 +110,8 @@ class MonteCarloAI:
                     max_games = rootNode.childNodes[i].noOfGames
                     node_to_return = i
         self.totalGamesPlayed = 0
-
+#        print(rootNode.childNodes[0].noOfGames, rootNode.childNodes[1].noOfGames, rootNode.childNodes[2].noOfGames, rootNode.childNodes[3].noOfGames, rootNode.childNodes[4].noOfGames, rootNode.childNodes[5].noOfGames, )
+        #print(node_to_return)
         return node_to_return
             
     def checkForGameEnd(self, gameFields):
@@ -145,7 +147,7 @@ class MonteCarloAI:
             node.expanded = True
             return
 
-        self.selection(node, whoseTurn)
+        self.selection(node, node.whoseTurn)
 
     def selection(self, node, whoseTurn):
         startField = 0
@@ -165,11 +167,11 @@ class MonteCarloAI:
                 self.update(node,0)
             return
         if(not node_to_simulate.expanded): 
-            self.expansion(node_to_simulate, whoseTurn)
+            self.expansion(node_to_simulate, node_to_simulate.whoseTurn)
             result = self.simulation(node_to_simulate.gameState, whoseTurn)
             self.update(node_to_simulate, result)
         else:
-            self.expansion(node_to_simulate, whoseTurn)
+            self.expansion(node_to_simulate, node_to_simulate.whoseTurn)
 
     def chooseBestNode(self, node, startField, endField, whoseTurn):
         if whoseTurn == 0: 
@@ -183,7 +185,7 @@ class MonteCarloAI:
                 if(not node.childNodes[i].explored):
                     node.childNodes[i].explored = True
                     return node.childNodes[i]
-                node_score = node.childNodes[i].noOfWins / node.childNodes[i].noOfGames + 1.4 * sqrt(log(node.noOfGames)/node.childNodes[i].noOfGames)
+                node_score = node.childNodes[i].noOfWins / node.childNodes[i].noOfGames + 10 * sqrt(log(node.noOfGames)/node.childNodes[i].noOfGames)
                 if (node_score > max_score and whoseTurn == 0):
                     max_score = node_score
                     node_to_return = node.childNodes[i]
@@ -201,10 +203,12 @@ class MonteCarloAI:
             endField = 13
 
         if whoseTurn == 1:
-            choice = randint(startField, endField-1)
+            #choice = randint(startField, endField-1)
+            choice = self.prioritizeScoreDifference(gameState[:], whoseTurn)
         else:
             #choice = self.prioritizeDoubleMove(gameState[:])
-            choice = randint(startField, endField-1)
+            #choice = randint(startField, endField-1)
+            choice = self.prioritizeScoreDifference(gameState[:], whoseTurn)
         temp_gameState, whoseTurn = self.move(gameState[:],choice)
         if(self.checkForGameEnd(temp_gameState)):
             if temp_gameState[6] > temp_gameState[13]:
@@ -232,6 +236,42 @@ class MonteCarloAI:
        else:
            choice = np.random.randint(0,len(available_double_moves))
            return available_double_moves[choice]
+
+    def prioritizeScoreDifference(self, temp_gameFields_copy, whoseTurn_start):
+        startField = 0
+        endField = 6
+        score = -50
+        choice = 0
+        if (whoseTurn_start == 1):
+            startField = 7
+            endField = 13
+            score = 50
+            choice = 7
+
+        for i in range (startField, endField):
+            gameFields = temp_gameFields_copy[:]
+            if (gameFields[i] != 0):
+                gameFields, whoseTurn = self.move(gameFields, i)
+                if (whoseTurn_start == 0):
+                    if (whoseTurn == 1):
+                        if (score < gameFields[6] - gameFields[13] ):
+                            score = gameFields[6] - gameFields[13]
+                            choice = i
+                    else:
+                        if(score < gameFields[6] - gameFields[13] + 1):
+                            score = gameFields[6] - gameFields[13] + 1
+                            choice = i
+                else :
+                    if (whoseTurn == 0):
+                        if (score > gameFields[6] - gameFields[13]):
+                            score = gameFields[6] - gameFields[13]
+                            choice = i
+                    else:
+                        if (score > gameFields[6] - gameFields[13] - 1):
+                            score = gameFields[6] - gameFields[13] - 1
+                            choice = i
+        return choice
+
 
 
 
