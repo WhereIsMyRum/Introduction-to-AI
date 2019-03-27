@@ -13,11 +13,19 @@ import matplotlib.pylab as plt
 #scores_against_mm9 = [0, 8, 29, 75, 89, 82]
 #scores_against_mcts = [2, 53, 99, 96, 100,  100]
 
-scores_against_rand = [44, 99,  100,  97, 99]
-scores_against_mm2 = [4, 63, 94, 86, 91 ]
-scores_against_mm5 = [4, 38, 84, 82, 90]
-scores_against_mm7 = [2, 5, 36, 82, 82]
-scores_against_mm9 = [0, 29, 75, 89, 82]
+scores_against_rand = [43,99,100,100,100]
+scores_against_mm2 = [2,72,91,89,89]
+scores_against_mm5 = [2,32,89,89,89]
+scores_against_mm7 = [3,32,82,84,87]
+scores_against_mm9 = [3,35,78,81,90]
+
+draws_against_rand = [5,1,0,0,0]
+draws_against_mm2 = [0,3,4,3,2]
+draws_against_mm5 = [0,8,6,4,2]
+draws_against_mm7 = [0,15,6,10,9]
+draws_against_mm9 = [3,9,6,7,6]
+
+draws_matrix = [draws_against_rand, draws_against_mm2, draws_against_mm5, draws_against_mm7, draws_against_mm9]
 
 #score_matrix = [scores_against_rand, scores_against_mcts, scores_against_mm2, scores_against_mm5, scores_against_mm7, scores_against_mm9]
 score_matrix = [scores_against_rand, scores_against_mm2, scores_against_mm5, scores_against_mm7, scores_against_mm9]
@@ -76,9 +84,11 @@ min_val, max_val = 0,100
 im = ax3.matshow(score_matrix, cmap=plt.cm.Reds)
 ax3.set_xticklabels(('rand', 'rand','mm2','mm5','mm7','mm9'))
 ax3.set_yticklabels(('rand',  'rand','mm2','mm5','mm7','mm9'))
+ax3.set_title('Results of games between different tree depths/algorithms')
 for i in range(0, len(scores_against_mm2)):
     for j in range(0, len(scores_against_mm2)):
-        ax3.text(i,j, score_matrix[j][i], va='center', ha='center')
+        Str = str(score_matrix[j][i]) + ' (' + str(draws_matrix[j][i]) + ')'
+        ax3.text(i,j, Str, va='center', ha='center')
 fig3.colorbar(im)
 fig3.tight_layout()
 plt.show()

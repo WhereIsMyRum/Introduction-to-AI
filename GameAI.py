@@ -6,7 +6,6 @@ class AI:
         self.maxTreeDepth = maxTreeDepth
 
     def extractGameState(self, smallFieldsArray, basesArray, whoseTurn):
-        #
         gameFields_temp = []
         gameFields = []
         for i in range(0, 14):
@@ -27,14 +26,12 @@ class AI:
                 gameFields.append(gameFields_temp[i])
             for i in range(0,7):
                 gameFields.append(gameFields_temp[i])
-
         return gameFields
 
     def move(self, gameFields, choice):
         whoseTurn = 0
         if choice > 5:
             whoseTurn = 1
-
 
         startingIndex = choice + 1
         i = choice + 1
@@ -56,7 +53,6 @@ class AI:
                 else:
                     startingIndex += 1
                     gameFields[startingIndex] += 1
-
             i += 1
             startingIndex += 1
 
@@ -116,9 +112,15 @@ class AI:
         else :
             v = alpha
 
+        gameEnd = self.checkForGameEnd(temp_gameFields)
         # terminate at this depth
-        if(searchtreeDepth == self.maxTreeDepth):
-            return temp_gameFields[6] - temp_gameFields[13]
+        if(searchtreeDepth == self.maxTreeDepth or gameEnd != 0):
+            if (gameEnd == 1):
+                return temp_gameFields[6] - temp_gameFields[13] + sum(temp_gameFields[7:12])
+            elif (gameEnd == 2):
+                return temp_gameFields[6] - temp_gameFields[13] - sum(temp_gameFields[0:5])
+            else:
+                return temp_gameFields[6] - temp_gameFields[13]
         else:
             # try out each possible move
             for i in range(startingField, endingField):
@@ -126,10 +128,8 @@ class AI:
 
                 # check for pruning
                 if(whoseTurnAtCurrentDepth == 0 and v > beta):
-                    #print("pruned at depth: ", searchtreeDepth,  " v: ", v, " beta: ", beta)
                     break
                 elif whoseTurnAtCurrentDepth == 1 and v < alpha :
-                    #print("pruned at depth: ", searchtreeDepth,  " v: ", v, " alpha: ", alpha)
                     break
 
                 if(temp_gameFields[i] == 0):
@@ -139,10 +139,9 @@ class AI:
                     # calculate the state resulting from current move
                     temp_gameFields, whoseTurn = self.move(temp_gameFields, i)
                     
-
                     # call the function recursively (advance in depth - DFS)
                     moveScore.append(self.findBestMove(temp_gameFields, whoseTurn, searchtreeDepth+1, numberOfAnalyzedStates,  alpha, beta))
-                    #whoseTurn = -1 * whoseTurn + 1
+
                     # update alpha and beta values
                     if(whoseTurnAtCurrentDepth == 0) :
                         if( moveScore[-1] > v):
@@ -198,6 +197,24 @@ class AI:
         choice = self.findBestMove(gameFields, whoseTurn, searchtreeDepth, numberOfAnalyzedStates, alpha, beta)
         #print("Number of Analyzed states: ", numberOfAnalyzedStates)
         return choice
+
+    def checkForGameEnd(self, gameFields):
+        playerOne = True
+        playerTwo = True
+
+        for i in range(0, 6):
+            if gameFields[i] > 0:
+                playerOne = False
+        if (playerOne):
+            return 1
+
+        for i in range(7, 13):
+            if gameFields[i] > 0:
+                playerTwo = False
+        if (playerTwo):
+            return 2
+
+        return 0
 
     
 
