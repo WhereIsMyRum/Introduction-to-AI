@@ -211,8 +211,8 @@ setupBoard()
 disableButtons()
 # pass a value to change the search tree depth
 MinMaxAI_1 = GameAI.AI(2)
-MinMaxAI_2 = GameAI.AI(2)
-MonteCarloAI = MonteCarloAI.MonteCarloAI(100000)
+MinMaxAI_2 = GameAI.AI(9)
+MonteCarloAI = MonteCarloAI.MonteCarloAI(2000)
 
 
 while True:
@@ -227,12 +227,12 @@ while True:
 
 
     # Comment all the lines below to play against AI
-    if(whoseTurn == 1):
-        choice = MinMaxAI_2.makeDecision(smallFieldsArray, basesArray, whoseTurn)
+    #if(whoseTurn == 1):
+    #    choice = MinMaxAI_2.makeDecision(smallFieldsArray, basesArray, whoseTurn)
     #    choice = MonteCarloAI.makeDecision(smallFieldsArray, basesArray, whoseTurn)
     #    choice = randint(0,5)
-        choice += 6  #very important!!!
+    #    choice += 6  #very important!!!
         #print(choice)
-        buttonClick(smallFieldsArray[choice], choice)
+    #    buttonClick(smallFieldsArray[choice], choice)
 
 

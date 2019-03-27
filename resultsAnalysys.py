@@ -6,14 +6,21 @@ import matplotlib.pylab as plt
 # the order of game scores array (starting algorithm)
 # Random,  MCTS,  MM2, MM5, MM7, MM9,
 
-scores_against_rand = [44, 96, 99,  100,  97, 99]
-scores_against_mm2 = [4, 3, 63, 94, 86, 91 ]
-scores_against_mm5 = [4, 2, 38, 84, 82, 90]
-scores_against_mm7 = [2, 9,  5, 36, 82, 82]
-scores_against_mm9 = [0, 8, 29, 75, 89, 82]
-scores_against_mcts = [2, 53, 99, 96, 100,  100]
+#scores_against_rand = [44, 96, 99,  100,  97, 99]
+#scores_against_mm2 = [4, 3, 63, 94, 86, 91 ]
+#scores_against_mm5 = [4, 2, 38, 84, 82, 90]
+#scores_against_mm7 = [2, 9,  5, 36, 82, 82]
+#scores_against_mm9 = [0, 8, 29, 75, 89, 82]
+#scores_against_mcts = [2, 53, 99, 96, 100,  100]
 
-score_matrix = [scores_against_rand, scores_against_mcts, scores_against_mm2, scores_against_mm5, scores_against_mm7, scores_against_mm9]
+scores_against_rand = [44, 99,  100,  97, 99]
+scores_against_mm2 = [4, 63, 94, 86, 91 ]
+scores_against_mm5 = [4, 38, 84, 82, 90]
+scores_against_mm7 = [2, 5, 36, 82, 82]
+scores_against_mm9 = [0, 29, 75, 89, 82]
+
+#score_matrix = [scores_against_rand, scores_against_mcts, scores_against_mm2, scores_against_mm5, scores_against_mm7, scores_against_mm9]
+score_matrix = [scores_against_rand, scores_against_mm2, scores_against_mm5, scores_against_mm7, scores_against_mm9]
 score_matrix = np.asarray(score_matrix)
 print(score_matrix.shape)
 
@@ -43,8 +50,9 @@ rects1 = ax.bar(index, pruning_states, bar_width, alpha=opacity, color='b', labe
 rects2 = ax.bar(index + bar_width, nopruning_states, bar_width, alpha=opacity, color='r', label="no pruning")
 
 ax.set_xlabel('Max depth')
-ax.set_ylabel('Number of states')
+ax.set_ylabel('Number of states [#x10^5]')
 ax.set_title('No. of states by max depth and pruning')
+ax.set_yticklabels(('0,', '5', '10', '15', '20', '25', '30', '35'))
 ax.set_xticks(index + bar_width / 2)
 ax.set_xticklabels(('2','4','5','6','7','8','9','10'))
 ax.legend()
@@ -55,7 +63,7 @@ rects1 = ax2.bar(index, pruning_time, bar_width, alpha=opacity, color='b', label
 rects2 = ax2.bar(index + bar_width, nopruning_time, bar_width, alpha=opacity, color='r', label="no pruning")
 
 ax2.set_xlabel('Max depth')
-ax2.set_ylabel('Runtime')
+ax2.set_ylabel('Runtime [s]')
 ax2.set_title('Runtime by max depth and pruning')
 ax2.set_xticks(index + bar_width / 2)
 ax2.set_xticklabels(('2','4','5','6','7','8','9','10'))
@@ -63,12 +71,14 @@ ax2.legend()
 
 fig2.tight_layout()
 
-
 fig3, ax3 = plt.subplots()
 min_val, max_val = 0,100
 im = ax3.matshow(score_matrix, cmap=plt.cm.Reds)
-ax3.set_xticklabels(('rand', 'rand','mcts','mm2','mm5','mm7','mm9'))
-ax3.set_yticklabels(('rand',  'rand','mcts','mm2','mm5','mm7','mm9'))
+ax3.set_xticklabels(('rand', 'rand','mm2','mm5','mm7','mm9'))
+ax3.set_yticklabels(('rand',  'rand','mm2','mm5','mm7','mm9'))
+for i in range(0, len(scores_against_mm2)):
+    for j in range(0, len(scores_against_mm2)):
+        ax3.text(i,j, score_matrix[j][i], va='center', ha='center')
 fig3.colorbar(im)
 fig3.tight_layout()
 plt.show()
