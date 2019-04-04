@@ -2,6 +2,9 @@ from random import randint
 import numpy as np
 class AI:
 
+    def __init__(self, maxTreeDepth):
+        self.maxTreeDepth = maxTreeDepth
+
     def extractGameState(self, smallFieldsArray, basesArray):
         gameFields = []
 
@@ -100,9 +103,15 @@ class AI:
             startingField = 7
             endingField = 13
 
+        gameEnd = self.checkForGameEnd(temp_gameFields)
         # terminate at this depth
-        if(searchtreeDepth == 5):
-            return temp_gameFields[6] - temp_gameFields[13]
+        if(searchtreeDepth == self.maxTreeDepth or gameEnd != 0):
+            if (gameEnd == 1):
+                return temp_gameFields[6] - temp_gameFields[13] + sum(temp_gameFields[7:12])
+            elif (gameEnd == 2):
+                return temp_gameFields[6] - temp_gameFields[13] - sum(temp_gameFields[0:5])
+            else:
+                return temp_gameFields[6] - temp_gameFields[13]
         else:
             # try out each possible move
             for i in range(startingField, endingField):
@@ -132,7 +141,7 @@ class AI:
                 moveScore[maxScore] = -100
                 maxScore = np.random.choice(np.flatnonzero(moveScore == moveScore.max()))
                 #maxScore = np.argmax(moveScore)
-            print("Score ranking of each move: ", moveScore[::-1])
+            #print("Score ranking of each move: ", moveScore[::-1])
             return maxScore
         # return score in case of a max node
         if(whoseTurnAtCurrentDepth == 0):
@@ -152,8 +161,27 @@ class AI:
         
         # call the function finding the most optimal move
         choice = self.findBestMove(gameFields, whoseTurn, searchtreeDepth, numberOfAnalyzedStates)
-        print("Number of Analyzed states: ", numberOfAnalyzedStates)
+        #print("Number of Analyzed states: ", numberOfAnalyzedStates)
         return choice
+
+    def checkForGameEnd(self, gameFields):
+        playerOne = True
+        playerTwo = True
+
+        for i in range(0, 6):
+            if gameFields[i] > 0:
+                playerOne = False
+        if (playerOne):
+            return 1
+
+        for i in range(7, 13):
+            if gameFields[i] > 0:
+                playerTwo = False
+        if (playerTwo):
+            return 2
+
+        return 0
+
 
     
 

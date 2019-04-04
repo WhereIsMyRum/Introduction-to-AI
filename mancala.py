@@ -1,6 +1,7 @@
 from tkinter import *
 from random import randint
-import GameAI_no_pruning, GameAI, MonteCarloAI
+import GameAI_no_pruning, GameAI
+import time
 
 # player 0 plays red (bottom part of the board)
 # player 1 plays green (upper part of the board),
@@ -10,7 +11,7 @@ root = Tk()
 noOfBases = 2
 whoseTurnInitial = randint(0,1)
 whoseTurn = whoseTurnInitial
-whoseTurn = 0
+#whoseTurn = 0 # uncomment if u want first player to always start
 
 smallFieldsArray = []
 basesArray = []
@@ -21,6 +22,7 @@ playerNo1Starts = 0
 playerNo0Wins = 0
 playerNo1Wins = 0
 numberOfGames = 0
+play = True
 
 if (whoseTurn == 0):
     playerNo0Starts += 1
@@ -93,7 +95,7 @@ def checkForEmptyField(button, buttonIndex):
 
 def buttonClick(button, buttonID):
 
-    global whoseTurn, playerNo0Wins, playerNo1Wins, numberOfGames
+    global whoseTurn, playerNo0Wins, playerNo1Wins, numberOfGames, play
     value = int(button['text'])
     button.config(text="0")
     startingIndex = int(buttonID)+1
@@ -155,7 +157,7 @@ def buttonClick(button, buttonID):
             print("Draws: ", 100 - playerNo0Wins - playerNo1Wins)
             print("Player 0 starts: ", playerNo0Starts)
             print("Player 1 starts: ", playerNo1Starts)
-            exit()
+            play = False
         else :
             print("Game number: ", numberOfGames + 1)
             resetBoard(smallFieldsArray, basesArray)
@@ -198,7 +200,7 @@ def resetBoard(smallFieldsArray, basesArray):
     for base in basesArray:
         base['text'] = 0
     whoseTurn = randint(0,1)
-    whoseTurn = 0
+    #whoseTurn = 0 # uncomment if u want first player to always start
     if whoseTurn == 0:
         playerNo0Starts += 1
     else:
@@ -210,30 +212,31 @@ def resetBoard(smallFieldsArray, basesArray):
 setupBoard()
 disableButtons()
 # pass a value to change the search tree depth
-MinMaxAI_1 = GameAI.AI(9)
-MinMaxAI_2 = GameAI.AI(9)
-MinMaxAI_no_pruning = GameAI_no_pruning.AI()
-MonteCarloAI = MonteCarloAI.MonteCarloAI(2000)
+MinMaxAI_1 = GameAI.AI(7) #insert a depth value
+MinMaxAI_2 = GameAI.AI(2)
+MinMaxAI_no_pruning = GameAI_no_pruning.AI(7)
 
+start = time.time()
 
-while True:
+while (play):
     root.update_idletasks()
     root.update()
     if(whoseTurn == 0):
-        choice = MinMaxAI_1.makeDecision(smallFieldsArray, basesArray, whoseTurn)
-    #    choice = MonteCarloAI.makeDecision(smallFieldsArray, basesArray, whoseTurn)
+    #    choice = MinMaxAI_1.makeDecision(smallFieldsArray, basesArray, whoseTurn)
+        choice = MinMaxAI_no_pruning.makeDecision(smallFieldsArray, basesArray, whoseTurn) # can only play as player 0!
     #    choice = randint(0,6)
         #print(choice)
         buttonClick(smallFieldsArray[choice], choice)
-
+    if(not play): break
 
     # Comment all the lines below to play against AI
     if(whoseTurn == 1):
         choice = MinMaxAI_2.makeDecision(smallFieldsArray, basesArray, whoseTurn)
-    #    choice = MonteCarloAI.makeDecision(smallFieldsArray, basesArray, whoseTurn)
     #    choice = randint(0,5)
         choice += 6  #very important!!!
         #print(choice)
         buttonClick(smallFieldsArray[choice], choice)
+end = time.time()
+print(end-start)
 
 
