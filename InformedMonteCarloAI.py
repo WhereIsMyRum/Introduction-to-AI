@@ -1,6 +1,9 @@
 from random import randint
 import numpy as np
 
+
+
+
 class InformedMonteCarloAI:
 
     def extractGameState(self, smallFieldsArray, basesArray, whoseTurn):
