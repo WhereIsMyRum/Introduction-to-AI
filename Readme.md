@@ -32,7 +32,7 @@ as the main algorithm was the MiniMax algorithm.-->
 </p>
 <h3 class="what">What</h3>
 <div class="what">
-  This is an implementation of the <a href="https://en.wikipedia.org/wiki/Mancala">Mancala</a> (also known as Kalaha) game, that allows the player to play against an AI, or against another player.
+  This is an implementation of the <a target="_blank" href="https://en.wikipedia.org/wiki/Mancala">Mancala</a> (also known as Kalaha) game, that allows the player to play against an AI, or against another player.
   The implementation consists of two main parts:
   <ul>
     <li> Simple GUI implemented using tkinter </li>
@@ -42,9 +42,9 @@ as the main algorithm was the MiniMax algorithm.-->
 <h3 class="how">How</h3>
   <div class="how">Three different algorithms can be found in this implementation:
     <ul>
-      <li><a href="https://en.wikipedia.org/wiki/Minimax">MiniMax</a></li>
-      <li>MiniMax with <a href="https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning">Alpha-beta pruning</a>
-      <li><a href="https://pl.wikipedia.org/wiki/Monte-Carlo_Tree_Search">Monte Carlo tree search</a></li>
+      <li><a target="_blank"  href="https://en.wikipedia.org/wiki/Minimax">MiniMax</a></li>
+      <li>MiniMax with <a target="_blank" href="https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning">Alpha-beta pruning</a>
+      <li><a target="_blank" href="https://pl.wikipedia.org/wiki/Monte-Carlo_Tree_Search">Monte Carlo tree search</a></li>
     </ul>
   </div>
 <h3 class="technologies">Technologies used</h3>
