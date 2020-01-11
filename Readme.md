@@ -27,18 +27,41 @@ as the main algorithm was the MiniMax algorithm.-->
 <body>
 <h1 class="title">Mancala AI</h1>
 <h3 class="why">Why</h3>
-<p class="why">Why</p>
+<p class="why">
+  This project was created during Introduction to Artificail Intelligence course, during my MSc of Computer Science and Engineering stuides.
+</p>
 <h3 class="what">What</h3>
-<p class="what">What</p>
+<div class="what">
+  This is an implementation of the <a href="https://en.wikipedia.org/wiki/Mancala">Mancala</a> (also known as Kalaha) game, that allows the player to play against an AI, or against another player.
+  The implementation consists of two main parts:
+  <ul>
+    <li> Simple GUI implemented using tkinter </li>
+    <li> The AI implementation </li>
+  </ul>
+</div>
 <h3 class="how">How</h3>
-<p class="how">How</p>
+  <div class="how">Three different algorithms can be found in this implementation:
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Minimax">MiniMax</a></li>
+      <li>MiniMax with <a href="https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning">Alpha-beta pruning</a>
+      <li><a href="https://pl.wikipedia.org/wiki/Monte-Carlo_Tree_Search">Monte Carlo tree search</a></li>
+    </ul>
+  </div>
 <h3 class="technologies">Technologies used</h3>
 <ul class="technologies">
   <li class="technologies" hover="Python">Python</li>
 </ul>
 <h3 class="usage">How to use</h3>
-<p class="usage">In progress.</p>
+<div class="usage">
+  <h5>Prerequisites</h5>
+  <ul>
+    <li>Python 3.6</li>
+    <li>Numpy module</li>
+  </ul>
+  <h5>Play</h5>
+  <p>In the default setup MiniMax of depth 2 plays against MiniMax of depth 7. To play against the AI simply comment the suggested lines in the mancala.py (no console arguments were added). To run the game simply use <i>python manacala.py</i></p>
+</div>
 <hr>
-<small class="created">Created: September 2019</small>
+<small class="created">Created: March 2019</small>
 </body>
 </html>
