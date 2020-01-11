@@ -53,17 +53,17 @@ as the main algorithm was the MiniMax algorithm.-->
 </ul>
 <h3 class="usage">How to use</h3>
 <div class="usage">
-  <div class="inline-div">
+  <span>
     <h6>Prerequisites</h6>
     <ul>
       <li>Python 3.6</li>
       <li>Numpy module</li>
     </ul>
-  </div>
-  <div class="inline-div">
+  </span>
+  <span>
     <h6>Play</h6>
      In the default setup MiniMax of depth 2 plays against MiniMax of depth 7. To play against the AI simply comment the sugges ted lines in the mancala.py (no console arguments were added). To run the game simply use <i>python manacala.py</i>
-  </div>
+  </span>
 </div>
 <hr>
 <small class="created">Created: March 2019</small>
