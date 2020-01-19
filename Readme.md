@@ -28,7 +28,7 @@ as the main algorithm was the MiniMax algorithm.-->
 <h1 class="title">Mancala AI</h1>
 <h3 class="why">Why</h3>
 <p class="why">
-  This project was created during Introduction to Artificail Intelligence course, during my MSc of Computer Science and Engineering stuides.
+  This project was created during Introduction to Artificial Intelligence course, during my MSc of Computer Science and Engineering stuides.
 </p>
 <h3 class="what">What</h3>
 <div class="what">
@@ -44,7 +44,7 @@ as the main algorithm was the MiniMax algorithm.-->
     <ul>
       <li><a target="_blank"  href="https://en.wikipedia.org/wiki/Minimax">MiniMax</a></li>
       <li>MiniMax with <a target="_blank" href="https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning">Alpha-beta pruning</a>
-      <li><a target="_blank" href="https://pl.wikipedia.org/wiki/Monte-Carlo_Tree_Search">Monte Carlo tree search</a></li>
+      <li><a target="_blank" href="https://en.wikipedia.org/wiki/Monte_Carlo_tree_search">Monte Carlo tree search</a></li>
     </ul>
   </div>
 <h3 class="technologies">Technologies used</h3>
@@ -59,7 +59,7 @@ as the main algorithm was the MiniMax algorithm.-->
       <li>Numpy module</li>
     </ul>
     <h6>Play</h6>
-     In the default setup MiniMax of depth 2 plays against MiniMax of depth 7. To play against the AI simply comment the sugges ted lines in the mancala.py (no console arguments were added). To run the game simply use <i>python manacala.py</i>
+     In the default setup MiniMax of depth 2 plays against MiniMax of depth 7. To play against the AI simply comment the suggested lines in the mancala.py (no console arguments were added). To run the game simply use <i>python manacala.py</i>
 </div>
 <hr>
 <small class="created">Created: March 2019</small>
