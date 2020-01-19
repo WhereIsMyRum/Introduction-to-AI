@@ -26,40 +26,40 @@ as the main algorithm was the MiniMax algorithm.-->
 <html>
 <body>
 <h1 class="title">Mancala AI</h1>
-<h3 class="why">Why</h3>
+<h3 class="why">Powód</h3>
 <p class="why">
-  This project was created during Introduction to Artificail Intelligence course, during my MSc of Computer Science and Engineering stuides.
+  Pojekt powstał w ramach przedmiotu Wprowadzenie do Sztucznej Inteligencji (Introduction to Artificial Intelligence), podczas moich studiów magisterskich (Informatyka - Computer Science and Engineering) na Duńskim Uniwersytecie Technicznym (DTU). 
 </p>
-<h3 class="what">What</h3>
+<h3 class="what">Cel</h3>
 <div class="what">
-  This is an implementation of the <a target="_blank" href="https://en.wikipedia.org/wiki/Mancala">Mancala</a> (also known as Kalaha) game, that allows the player to play against an AI, or against another player.
-  The implementation consists of two main parts:
+  Celem było zaimplementowanie klienta gry <a target="_blank" href="https://pl.wikipedia.org/wiki/Mankala">Mankala</a> (znanej również jako Kalaha) umożliwiającego grę zarówno z przeciwnikiem jak i ze sztuczną inteligencją (której implementacja była głównym celem projektu).
+  Projekt składa się z dwóch głównych części:
   <ul>
-    <li> Simple GUI implemented using tkinter </li>
-    <li> The AI implementation </li>
+    <li> Prosty interfejs graficzny stworzony przy pomocy modułu tkinter </li>
+    <li> Implementacja sztucznej inteligencji </li>
   </ul>
 </div>
-<h3 class="how">How</h3>
-  <div class="how">Three different algorithms can be found in this implementation:
+<h3 class="how">Wykonanie</h3>
+  <div class="how">Zaimplementowane zostały trzy różne algorytmy, pełniące funkcję przecniwnika AI:
     <ul>
-      <li><a target="_blank"  href="https://en.wikipedia.org/wiki/Minimax">MiniMax</a></li>
-      <li>MiniMax with <a target="_blank" href="https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning">Alpha-beta pruning</a>
+      <li><a target="_blank"  href="https://pl.wikipedia.org/wiki/Algorytm_min-max">Algorytm MiniMax</a></li>
+      <li>Algorytm MiniMax z wykorzystaniem <a target="_blank" href="https://pl.wikipedia.org/wiki/Algorytm_alfa-beta">algorytmu Alpha-beta</a>
       <li><a target="_blank" href="https://pl.wikipedia.org/wiki/Monte-Carlo_Tree_Search">Monte Carlo tree search</a></li>
     </ul>
   </div>
-<h3 class="technologies">Technologies used</h3>
+<h3 class="technologies">Zastosowane technologie</h3>
 <ul class="technologies">
   <li class="technologies" hover="Python">Python</li>
 </ul>
-<h3 class="usage">How to use</h3>
+<h3 class="usage">Jak korzystać</h3>
 <div class="usage">
-    <h6>Prerequisites</h6>
+    <h6>Wymaganie</h6>
     <ul>
       <li>Python 3.6</li>
-      <li>Numpy module</li>
+      <li>Moduł Numpy</li>
     </ul>
     <h6>Play</h6>
-     In the default setup MiniMax of depth 2 plays against MiniMax of depth 7. To play against the AI simply comment the sugges ted lines in the mancala.py (no console arguments were added). To run the game simply use <i>python manacala.py</i>
+    Domyślnie ustawiono starcie pomiędzy dwoma przeciwnikami AI - MiniMax o głębokości 2 oraz 7. Aby zagrać przeciwko AI, zakomentuj linie kodu zasugerowane w pliku mancala.py. Aby uruchomić grę, użyj komendy <i>python manacala.py</i>
 </div>
 <hr>
 <small class="created">Created: March 2019</small>
